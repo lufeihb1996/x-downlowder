@@ -78,7 +78,7 @@ document.addEventListener('DOMContentLoaded', () => {
     loadingCard.style.display = 'block';
 
     try {
-      const res = await fetch(`/api/video/parse?url=${encodeURIComponent(rawUrl)}`);
+      const res = await fetch(`/api/parse?url=${encodeURIComponent(rawUrl)}`);
       const data = await res.json();
 
       if (!res.ok) {
@@ -129,7 +129,7 @@ document.addEventListener('DOMContentLoaded', () => {
           badgeClass = 'badge-ld';
         }
 
-        const proxyDownloadUrl = `/api/video/download-proxy?url=${encodeURIComponent(f.url)}`;
+        const proxyDownloadUrl = `/api/proxy?url=${encodeURIComponent(f.url)}`;
 
         item.innerHTML = `
           <div class="res-info">
