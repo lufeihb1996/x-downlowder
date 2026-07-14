@@ -1,0 +1,36 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" width="512" height="512">
+  <defs>
+    <!-- Background Gradient -->
+    <linearGradient id="bg-grad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#0b0d19" />
+      <stop offset="100%" stop-color="#181c38" />
+    </linearGradient>
+    
+    <!-- Neon Glow Gradient -->
+    <linearGradient id="glow-grad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#1da1f2" />
+      <stop offset="100%" stop-color="#6366f1" />
+    </linearGradient>
+    
+    <!-- Shadow Filter -->
+    <filter id="shadow" x="-10%" y="-10%" width="120%" height="120%">
+      <feDropShadow dx="0" dy="8" stdDeviation="12" flood-color="#1da1f2" flood-opacity="0.3" />
+    </filter>
+  </defs>
+
+  <!-- Rounded Base Box -->
+  <rect width="512" height="512" rx="128" fill="url(#bg-grad)" stroke="rgba(255,255,255,0.06)" stroke-width="8" />
+
+  <!-- Outer Glow Ring -->
+  <circle cx="256" cy="256" r="190" fill="none" stroke="rgba(29, 161, 242, 0.15)" stroke-width="12" stroke-dasharray="10 15" />
+
+  <!-- Inner Brand Container -->
+  <g filter="url(#shadow)">
+    <!-- X/Twitter Path (reconstructed in modern aesthetics) -->
+    <path d="M140 120 L228 244 L132 392 L172 392 L248 274 L318 392 L380 392 L288 262 L374 120 L334 120 L268 226 L202 120 Z" fill="url(#glow-grad)" />
+    
+    <!-- Down Arrow Overlay (Symbolizes Download) -->
+    <path d="M226 310 L256 340 L286 310" fill="none" stroke="#ffffff" stroke-width="18" stroke-linecap="round" stroke-linejoin="round" />
+    <path d="M256 220 L256 332" fill="none" stroke="#ffffff" stroke-width="18" stroke-linecap="round" />
+  </g>
+</svg>

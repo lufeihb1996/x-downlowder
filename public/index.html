@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+  <title>X / Twitter 视频下载器</title>
+  
+  <!-- iOS Meta Tags for PWA -->
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <meta name="apple-mobile-web-app-title" content="X Downloader">
+  
+  <!-- Font and Icons -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700&family=Noto+Sans+SC:wght@300;400;500;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  
+  <link rel="stylesheet" href="style.css">
+  <link rel="manifest" href="manifest.json">
+  <link rel="apple-touch-icon" href="icon-192.png">
+</head>
+<body>
+  <!-- Custom Neon Background Glows -->
+  <div class="glow-bg">
+    <div class="glow-1"></div>
+    <div class="glow-2"></div>
+  </div>
+
+  <div class="app-container">
+    <header class="app-header">
+      <div class="brand">
+        <div class="brand-icon-wrapper">
+          <i class="fa-brands fa-x-twitter brand-logo"></i>
+          <i class="fa-solid fa-arrow-down download-badge"></i>
+        </div>
+        <h1>X Downloader</h1>
+      </div>
+      <p class="subtitle">无损、免会员、免防盗链限制的推特视频下载助手</p>
+    </header>
+
+    <main class="main-panel">
+      <!-- Input Area -->
+      <section class="card input-card">
+        <div class="input-wrapper">
+          <input type="text" id="video-url" placeholder="请粘贴推文链接 https://x.com/..." autocomplete="off">
+          <button class="btn-paste" id="btn-paste" title="从剪贴板粘贴" type="button">
+            <i class="fa-regular fa-clipboard"></i>
+          </button>
+        </div>
+        <button class="btn btn-primary btn-block" id="btn-parse" type="button">
+          <i class="fa-solid fa-wand-magic-sparkles"></i> 开始解析
+        </button>
+      </section>
+
+      <!-- Loading State -->
+      <section class="card loading-card" id="loading-card" style="display: none;">
+        <div class="progress-ring-wrapper">
+          <div class="ring-spinner"></div>
+          <i class="fa-solid fa-circle-nodes inner-icon"></i>
+        </div>
+        <h3>正在解析视频</h3>
+        <p>正在与 X.com 握手并提取高清视频流...</p>
+      </section>
+
+      <!-- Error State -->
+      <section class="card error-card" id="error-card" style="display: none;">
+        <i class="fa-solid fa-circle-exclamation error-icon"></i>
+        <h3>解析失败</h3>
+        <p id="error-message">请确保是合规的公开视频推文链接</p>
+        <button class="btn btn-secondary" id="btn-error-retry" type="button">重新尝试</button>
+      </section>
+
+      <!-- Result Area -->
+      <section class="card result-card" id="result-card" style="display: none;">
+        <div class="video-preview">
+          <img id="video-thumbnail" src="" alt="Video Cover">
+          <div class="play-overlay">
+            <i class="fa-solid fa-play"></i>
+          </div>
+          <div class="duration-badge" id="video-duration">--:--</div>
+        </div>
+
+        <div class="video-meta">
+          <h2 id="video-title">推文内容标题</h2>
+        </div>
+
+        <div class="resolutions-section">
+          <h3><i class="fa-solid fa-download"></i> 选择下载清晰度</h3>
+          <div class="resolutions-list" id="resolutions-list">
+            <!-- Dynamically populated resolutions -->
+          </div>
+        </div>
+
+        <!-- iOS Save to Album Tutorial -->
+        <div class="tutorial-box">
+          <h4><i class="fa-solid fa-mobile-screen-button"></i> 📱 iPhone 保存到系统相册教程</h4>
+          <ol>
+            <li>点击上面你需要的清晰度，在弹出的 Safari 提示中选择<strong>“下载”</strong>。</li>
+            <li>下载后，点击 Safari 浏览器左下角/右下角的 <strong>“下载图标”</strong> 📥（或打开 iPhone 自带的 <strong>“文件” App</strong> ➡️ 进入 <strong>“下载”</strong> 文件夹）。</li>
+            <li>点击播放已下载的视频，点击左下角的 <strong>“分享” 📤</strong>。</li>
+            <li>在分享菜单中选择 <strong>“保存视频” (Save Video)</strong> 即可存入系统相册！</li>
+          </ol>
+        </div>
+      </section>
+    </main>
+
+    <footer class="app-footer">
+      <p>在 Safari 中点击分享按钮，选择“添加到主屏幕”，即可安装为桌面 App</p>
+      <p class="copyright">&copy; 2026 Antigravity. Powered by yt-dlp & Express.</p>
+    </footer>
+  </div>
+
+  <script src="app.js"></script>
+</body>
+</html>
