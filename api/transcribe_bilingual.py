@@ -70,21 +70,38 @@ def transcribe(audio_path):
     print("\n========== 第二步：载入 Whisper 模型并识别字幕 ==========")
     model_size = "base"
     print(f"正在加载 Whisper '{model_size}' 模型...")
-    model = WhisperModel(model_size, device="cpu", compute_type="int8", cpu_threads=1)
-    
-    print("开始语音识别，请稍候...")
-    segments, info = model.transcribe(audio_path, beam_size=5, vad_filter=True)
-    
-    detected_lang = info.language
-    print(f"检测到音频主语言: '{detected_lang}' (概率: {info.language_probability:.2f})")
     
     results = []
-    for segment in segments:
-        results.append({
-            'start': format_timestamp(segment.start),
-            'end': format_timestamp(segment.end),
-            'text': segment.text.strip()
-        })
+    detected_lang = 'en'
+    
+    # 优先尝试 PyTorch 原生 Whisper，避开 Windows 上 ctranslate2 的 DLL 冲突
+    try:
+        import whisper
+        print("使用 PyTorch Whisper 引擎识别...")
+        model = whisper.load_model(model_size)
+        res = model.transcribe(audio_path)
+        detected_lang = res.get('language', 'en')
+        print(f"检测到音频主语言: '{detected_lang}'")
+        for seg in res.get('segments', []):
+            results.append({
+                'start': format_timestamp(seg['start']),
+                'end': format_timestamp(seg['end']),
+                'text': seg['text'].strip()
+            })
+    except Exception as e1:
+        print(f"PyTorch Whisper 未就绪 ({e1})，尝试切换至 faster-whisper...")
+        from faster_whisper import WhisperModel
+        model = WhisperModel(model_size, device="cpu", compute_type="int8", cpu_threads=1)
+        segments, info = model.transcribe(audio_path, beam_size=5, vad_filter=True)
+        detected_lang = info.language
+        print(f"检测到音频主语言: '{detected_lang}' (概率: {info.language_probability:.2f})")
+        for segment in segments:
+            results.append({
+                'start': format_timestamp(segment.start),
+                'end': format_timestamp(segment.end),
+                'text': segment.text.strip()
+            })
+
     print(f"听写完成，共识别到 {len(results)} 句字幕。")
     return results, detected_lang
 
@@ -230,17 +247,28 @@ if __name__ == "__main__":
     
     temp_files = []
     try:
-        # 1. 下载视频并提取音频
+        # 1. 下载视频或处理本地视频/音频
         if input_source.startswith("http://") or input_source.startswith("https://"):
             video_file, audio_file = download_video_and_extract_audio(input_source)
             temp_files.append(video_file)
             temp_files.append(audio_file)
         else:
-            audio_file = input_source
-            video_file = None
-            if not os.path.exists(audio_file):
-                print(f"错误: 本地文件不存在 {audio_file}")
+            if not os.path.exists(input_source):
+                print(f"错误: 本地文件不存在 {input_source}")
                 sys.exit(1)
+            
+            ext = os.path.splitext(input_source)[1].lower()
+            if ext in ['.mp4', '.mkv', '.mov', '.avi', '.webm', '.flv']:
+                video_file = input_source
+                audio_file = "temp_audio.wav"
+                print(f"========== 第一步：从本地视频提取 16kHz 音频 ==========")
+                print(f"输入视频: {video_file}")
+                subprocess.run(["ffmpeg", "-y", "-i", video_file, "-vn", "-ar", "16000", "-ac", "1", audio_file],
+                               stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
+                temp_files.append(audio_file)
+            else:
+                audio_file = input_source
+                video_file = None
                 
         # 2. Whisper 语音识别
         segments, detected_lang = transcribe(audio_file)

@@ -11,6 +11,21 @@
 - **PWA (Progressive Web App) 支持**：配置离线 `sw.js` 缓存和 `manifest.json`，在 iOS/Android 上支持“添加到主屏幕”实现全屏原生 App 体验。
 - **竖屏视频智能分类**：前端依据视频短边像素，智能判断并标记 vertical 视频的真实分辨率等级（1080P/720P/480P）。
 
+## 🚀 本地启动与运行 (Local Running)
+
+在 `x-downloader` 根目录下，通过 Python 运行本地集成服务端：
+
+```bash
+# 启动本地服务 (默认端口 8088)
+python server.py
+
+# 或通过 npm / pnpm 启动
+npm start
+```
+
+服务启动后，在浏览器访问：
+👉 **http://localhost:8088**
+
 ---
 
 ## 📂 项目结构

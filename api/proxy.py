@@ -25,10 +25,11 @@ class handler(BaseHTTPRequestHandler):
             )
             with urllib.request.urlopen(req, timeout=60) as response:
                 self.send_response(200)
-                self.send_header('Content-Type', response.headers.get('Content-Type') or 'video/mp4')
+                self.send_header('Content-Type', 'application/octet-stream')
                 self.send_header('Content-Length', response.headers.get('Content-Length') or '')
                 self.send_header('Content-Disposition', f'attachment; filename="x-video-{int(time.time())}.mp4"')
                 self.send_header('Access-Control-Allow-Origin', '*')
+                self.send_header('Access-Control-Expose-Headers', 'Content-Length, Content-Disposition')
                 self.end_headers()
                 
                 # Stream content in chunks to save memory

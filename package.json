@@ -1,5 +1,9 @@
 {
   "name": "x-downloader",
   "version": "1.0.0",
-  "private": true
+  "private": true,
+  "scripts": {
+    "start": "python server.py",
+    "dev": "python server.py"
+  }
 }
