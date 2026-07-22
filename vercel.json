@@ -2,7 +2,8 @@
   "version": 2,
   "builds": [
     { "src": "public/**/*", "use": "@vercel/static" },
-    { "src": "api/*.py", "use": "@vercel/python" }
+    { "src": "api/parse.py", "use": "@vercel/python" },
+    { "src": "api/proxy.py", "use": "@vercel/python" }
   ],
   "routes": [
     { "src": "/api/parse", "dest": "/api/parse.py" },
